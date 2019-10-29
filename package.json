@@ -1,0 +1,17 @@
+{
+  "name": "blogasaurus_nodejs",
+  "version": "1.0.0",
+  "description": "Blogasaurus using Node.js",
+  "main": "app.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "TODO"
+  },
+  "author": "jessiedouglas",
+  "license": "ISC"
+}
