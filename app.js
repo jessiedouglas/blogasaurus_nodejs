@@ -16,11 +16,13 @@
 'use strict';
 
 const express = require('express');
-const ejs = require('ejs')
+const ejs = require('ejs');
 
 const app = express();
 // Set up static files in 'static' folder
 app.use(express.static('static'));
+// Parse forms
+app.use(express.urlencoded());
 
 // Home Page
 app.get('/', (req, res) => {
@@ -35,6 +37,31 @@ app.get('/', (req, res) => {
 // About my family
 app.get('/about', (req, res) => {
   ejs.renderFile('templates/about_my_family.html', {}, {}, function(err, html_output){
+    res
+      .status(200)
+      .send(html_output)
+      .end();
+  });
+});
+
+// New blog post
+app.get('/post', (req, res) => {
+  ejs.renderFile('templates/new_post.html', {}, {}, function(err, html_output){
+    res
+      .status(200)
+      .send(html_output)
+      .end();
+  });
+});
+
+// New blog post
+app.post('/post', (req, res) => {
+  const template_data = {
+    title: req.body.title,
+    name: req.body.name,
+    content: req.body.content,
+  };
+  ejs.renderFile('templates/view_post.html', template_data, {}, function(err, html_output){
     res
       .status(200)
       .send(html_output)
