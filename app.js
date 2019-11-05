@@ -15,16 +15,31 @@
 
 'use strict';
 
-// [START gae_node_request_example]
 const express = require('express');
+const ejs = require('ejs')
 
 const app = express();
+// Set up static files in 'static' folder
+app.use(express.static('static'));
 
+// Home Page
 app.get('/', (req, res) => {
-  res
-    .status(200)
-    .send('Hello, world!')
-    .end();
+  ejs.renderFile('templates/index.html', {}, {}, function(err, html_output){
+    res
+      .status(200)
+      .send(html_output)
+      .end();
+  });
+});
+
+// About my family
+app.get('/about', (req, res) => {
+  ejs.renderFile('templates/about_my_family.html', {}, {}, function(err, html_output){
+    res
+      .status(200)
+      .send(html_output)
+      .end();
+  });
 });
 
 // Start the server
@@ -33,6 +48,5 @@ app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
   console.log('Press Ctrl+C to quit.');
 });
-// [END gae_node_request_example]
 
 module.exports = app;
