@@ -1,0 +1,18 @@
+<html>
+<head>
+  <title>Blogasaurus Post</title>
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+  <% allPosts.forEach((blogPost) => { %>
+    <h1><%= blogPost.title %> by <%= blogPost.name %></h1>
+
+    <section>
+      <div>
+        <%= blogPost.content %>
+      </div>
+    </section>
+  <% }); %>
+  <script src="/js/index.js"></script>
+</body>
+</html>

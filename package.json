@@ -3,11 +3,19 @@
   "version": "1.0.0",
   "description": "Blogasaurus using Node.js",
   "main": "app.js",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "@google-cloud/datastore": "^4.0.0",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@google-cloud/nodejs-repo-tools": "^3.3.0",
+    "eslint": "^6.6.0",
+    "eslint-config-strongloop": "^2.1.0"
+  },
   "scripts": {
     "start": "node app.js 2>&1",
-    "test": "mocha"
+    "test": "mocha",
+    "eslint": "eslint --ignore-path .gitignore ."
   },
   "repository": {
     "type": "git",

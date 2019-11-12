@@ -17,6 +17,7 @@
 
 const express = require('express');
 const ejs = require('ejs');
+const blogPostStorage = require('./server/datastore_example.js');
 
 const app = express();
 // Set up static files in 'static' folder
@@ -56,15 +57,18 @@ app.get('/post', (req, res) => {
 
 // New blog post
 app.post('/post', (req, res) => {
-  const template_data = {
+  const blogPost = {
     title: req.body.title,
     name: req.body.name,
     content: req.body.content,
   };
-  ejs.renderFile('templates/view_post.html', template_data, {}, function(err, html_output){
+  await blogPostStorage.insertBlogPost(blogPost);
+  const [allPosts] = await blogPostStorage.getAllBlogPosts();
+  const templateData = {allPosts};
+  ejs.renderFile('templates/view_post.html', templateData, {}, function(err, htmlOutput){
     res
       .status(200)
-      .send(html_output)
+      .send(htmlOutput)
       .end();
   });
 });
