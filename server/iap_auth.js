@@ -66,7 +66,6 @@ async function validateAssertion(assertion) {
 }
 
 exports.getSignedInEmail = async (request) => {
-  console.log('project', process.env.GOOGLE_CLOUD_PROJECT);
   if (process.env.GOOGLE_CLOUD_PROJECT) {
     const assertion = request.header('X-Goog-IAP-JWT-Assertion');
     let email;
