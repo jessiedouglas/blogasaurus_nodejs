@@ -23,7 +23,9 @@ const app = express();
 // Set up static files in 'static' folder
 app.use(express.static('static'));
 // Parse forms
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: true}));
+// So it can be hosted on app engine
+app.enable('trust proxy');
 
 // Home Page
 app.get('/', (req, res) => {
@@ -56,16 +58,16 @@ app.get('/post', (req, res) => {
 });
 
 // New blog post
-app.post('/post', (req, res) => {
+app.post('/post', async (req, res) => {
   const blogPost = {
     title: req.body.title,
     name: req.body.name,
     content: req.body.content,
   };
-  await blogPostStorage.insertBlogPost(blogPost);
-  const [allPosts] = await blogPostStorage.getAllBlogPosts();
-  const templateData = {allPosts};
-  ejs.renderFile('templates/view_post.html', templateData, {}, function(err, htmlOutput){
+  await blogPostStorage.insertBlogPost(blogPost)
+  const [allBlogPosts] = await blogPostStorage.getAllBlogPosts();
+  const templateData = {allPosts: allBlogPosts};
+  ejs.renderFile('templates/view_all_posts.html', templateData, {}, function(err, htmlOutput){
     res
       .status(200)
       .send(htmlOutput)
