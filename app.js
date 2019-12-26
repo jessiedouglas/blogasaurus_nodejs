@@ -18,6 +18,7 @@
 const express = require('express');
 const ejs = require('ejs');
 const blogPostStorage = require('./server/datastore_example.js');
+const iapAuth = require('./server/iap_auth.js');
 
 const app = express();
 // Set up static files in 'static' folder
@@ -48,31 +49,41 @@ app.get('/about', (req, res) => {
 });
 
 // New blog post
-app.get('/post', (req, res) => {
-  ejs.renderFile('templates/new_post.html', {}, {}, function(err, html_output){
-    res
-      .status(200)
-      .send(html_output)
-      .end();
-  });
+app.get('/post', async (req, res) => {
+  const email = await iapAuth.getSignedInEmail(req);
+  if (email) {
+    ejs.renderFile('templates/new_post.html', {email}, {}, function(err, html_output){
+      res
+        .status(200)
+        .send(html_output)
+        .end();
+    });
+  } else {
+    res.status(404).send('404 Not Found').end();
+  }
 });
 
 // New blog post
 app.post('/post', async (req, res) => {
-  const blogPost = {
-    title: req.body.title,
-    name: req.body.name,
-    content: req.body.content,
-  };
-  await blogPostStorage.insertBlogPost(blogPost)
-  const [allBlogPosts] = await blogPostStorage.getAllBlogPosts();
-  const templateData = {allPosts: allBlogPosts};
-  ejs.renderFile('templates/view_all_posts.html', templateData, {}, function(err, htmlOutput){
-    res
-      .status(200)
-      .send(htmlOutput)
-      .end();
-  });
+  const email = await iapAuth.getSignedInEmail(req);
+  if (email) {
+    const blogPost = {
+      title: req.body.title,
+      email: req.body.email,
+      content: req.body.content,
+    };
+    await blogPostStorage.insertBlogPost(blogPost)
+    const [allBlogPosts] = await blogPostStorage.getAllBlogPosts();
+    const templateData = {allPosts: allBlogPosts};
+    ejs.renderFile('templates/view_all_posts.html', templateData, {}, function(err, htmlOutput){
+      res
+        .status(200)
+        .send(htmlOutput)
+        .end();
+    });
+  } else {
+    res.status(404).send('404 Not Found').end();
+  }
 });
 
 // Start the server

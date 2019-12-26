@@ -5,7 +5,7 @@
 </head>
 <body>
   <% allPosts.forEach((blogPost) => { %>
-    <h1><%= blogPost.title %> by <%= blogPost.name %></h1>
+    <h1><%= blogPost.title %> by <%= blogPost.email || "Unknown" %></h1>
 
     <section>
       <div>
